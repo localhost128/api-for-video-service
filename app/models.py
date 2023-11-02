@@ -21,6 +21,8 @@ class Category(models.Model):
 class Image(models.Model):
     url = models.URLField()
     is_main = models.BooleanField(default=True)
+    film = models.ForeignKey(
+            "Film", related_name="images", on_delete=models.CASCADE)
 
 
 class Film(models.Model):
