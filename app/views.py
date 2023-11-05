@@ -12,6 +12,8 @@ class FilmList(ListAPIView):
     serializer_class = FilmSerializer
 
     def get_queryset(self):
+        self.serializer_class.Meta.fields = '__all__'
+
         queryset = Film.objects.all()
         GET = self.request.GET
 
@@ -20,20 +22,23 @@ class FilmList(ListAPIView):
                 raise Http404
             queryset = queryset.order_by(ordering)
 
-        if film_type := GET.get('type'):
-            if not film_type.isdigit():
-                raise Http404
-            queryset = queryset.filter(film_type=film_type)
+        film_type = GET.get('type')
+        category = GET.get('category')
+        genre = GET.get('genre')
 
-        if category := GET.get('category'):
-            if not category.isdigit():
-                raise Http404
-            queryset = queryset.filter(category=category)
+        filters = (film_type, category, genre)
 
-        if genre := GET.get('genre'):
-            if not genre.isdigit():
+        if any(filters):
+            if not (all(filters) and all(map(lambda x: x.isdigit(), filters))):
                 raise Http404
-            queryset = queryset.filter(genere__id__contains=genre)
+            queryset = queryset.filter(
+                    film_type=film_type,
+                    category=category,
+                    genere__id__contains=genre
+                    )
+            self.serializer_class.Meta.fields = [
+                    "id", "name", "release_year", "img"
+                    ]
 
         if not (search := GET.get('search')) is None:
             if not search:
