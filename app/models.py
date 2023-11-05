@@ -45,7 +45,7 @@ class Film(models.Model):
     description = models.TextField(blank=True, max_length=350)
     release_year = models.IntegerField(validators=[MinValueValidator(1900)])
     film_type = models.ForeignKey("Type", on_delete=models.PROTECT)
-    genere = models.ManyToManyField("Genre", blank=True)
+    genres = models.ManyToManyField("Genre", blank=True)
     category = models.ForeignKey("Category", on_delete=models.PROTECT)
 
     get_latest_by = ["name", "-release_year"]
