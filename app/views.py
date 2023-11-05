@@ -16,6 +16,7 @@ class FilmList(ListAPIView):
         GET = self.request.GET
 
         if ordering := GET.get('ordering'):
+            print(ordering)
             if not fullmatch(r"-?release_year", ordering):
                 raise Http404
             queryset = queryset.order_by(ordering)
@@ -33,7 +34,7 @@ class FilmList(ListAPIView):
         if genre := GET.get('genre'):
             if not genre.isdigit():
                 raise Http404
-            queryset = queryset.filter(genere__id__contains=genre)
+            queryset = queryset.filter(genre__id__contains=genre)
 
         if not (search := GET.get('search')) is None:
             if not search:
