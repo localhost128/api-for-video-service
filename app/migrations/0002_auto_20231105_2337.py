@@ -5,6 +5,7 @@ from pathlib import Path
 from django.db import migrations
 from django.conf import settings
 
+
 def fill_model(apps, model_name):
     Model = apps.get_model('app', model_name)
     path_to_file = Path(settings.BASE_DIR) / f"app/db_filling/{model_name}.csv"
@@ -15,13 +16,12 @@ def fill_model(apps, model_name):
             Model(name=row["name"]).save()
 
 
-
 def fill_characteristics(apps, schema_editor):
     fill_model(apps, 'Type')
     fill_model(apps, 'Category')
     fill_model(apps, 'Genre')
     fill_model(apps, 'Audio')
- 
+
 
 def fill_films(apps, schema_editor):
     Film = apps.get_model('app', 'Film')
@@ -30,7 +30,6 @@ def fill_films(apps, schema_editor):
     genres = apps.get_model('app', 'Genre').objects.all()
 
     path_to_file = Path(settings.BASE_DIR) / f"app/db_filling/Film.csv"
-
 
     with open(path_to_file, newline='') as file:
         reader = csv.DictReader(file, delimiter=';')
@@ -50,7 +49,7 @@ def fill_films(apps, schema_editor):
             film.images.create(url="https://image-url-main.com", is_main=True)
             film.images.create(url="https://image-url.com", is_main=False)
 
-    
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -61,3 +60,4 @@ class Migration(migrations.Migration):
         migrations.RunPython(fill_characteristics),
         migrations.RunPython(fill_films),
     ]
+
