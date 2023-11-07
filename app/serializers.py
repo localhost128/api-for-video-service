@@ -31,3 +31,9 @@ class FilmSerializer(FilmDetailSerializer):
             return qs[0].url
         return "No main image"
 
+
+class FilteredFilmSerializer(FilmSerializer):
+    class Meta:
+        model = Film
+        fields = ['id', 'name', 'release_year', 'images']
+
