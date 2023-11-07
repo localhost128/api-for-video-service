@@ -19,7 +19,7 @@ class FilmDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Film
         fields = ['id', 'name', 'description', 'release_year',
-                  'film_type', 'genre', 'category', 'images']
+                  'film_type', 'genres', 'category', 'images']
 
 
 class FilmSerializer(FilmDetailSerializer):

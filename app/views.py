@@ -12,7 +12,10 @@ class FilmList(ListAPIView):
     serializer_class = FilmSerializer
 
     def get_queryset(self):
-        self.serializer_class.Meta.fields = '__all__'
+        self.serializer_class.Meta.fields = [
+                'id', 'name', 'description', 'release_year', 
+                'film_type', 'genres', 'category', 'images']
+
 
         queryset = Film.objects.all()
         GET = self.request.GET
@@ -35,10 +38,10 @@ class FilmList(ListAPIView):
             queryset = queryset.filter(
                     film_type=film_type,
                     category=category,
-                    generes__id__contains=genre
+                    genres__id__contains=genre
                     )
             self.serializer_class.Meta.fields = [
-                    "id", "name", "release_year", "img"
+                    "id", "name", "release_year", "images"
                     ]
 
         if not (search := GET.get('search')) is None:
